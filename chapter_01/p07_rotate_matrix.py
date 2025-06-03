@@ -66,7 +66,13 @@ def rotate_matrix_pythonic(matrix: Matrix) -> Matrix:
     for r_idx in range(n):  # r_idx for row index in original matrix
         for c_idx in range(n):  # c_idx for column index in original matrix
             result[c_idx][n - 1 - r_idx] = matrix[r_idx][c_idx]
+
     return result
+
+
+def rotate_matrix_pythonic_alternate(matrix):
+    """rotates a matrix 90 degrees clockwise"""
+    return [list(reversed(row)) for row in zip(*matrix)]
 
 
 class Test(unittest.TestCase):
@@ -94,10 +100,7 @@ class Test(unittest.TestCase):
         ([], []),  # Test with an empty matrix
         ([[1]], [[1]]),  # Test with a single element matrix
     ]
-    testable_functions: list[Callable[[Matrix], Matrix]] = [
-        rotate_matrix_pythonic,
-        rotate_matrix,
-    ]
+
 
     def test_rotate_matrix(self) -> None:
         """
@@ -148,7 +151,6 @@ class Test(unittest.TestCase):
                 except TypeError: # deepcopy failed (e.g. for [1,2,3] or mixed types)
                     matrix_to_test = invalid_matrix_input
                     expected_output = invalid_matrix_input
-
 
                 actual_output = rotate_func(matrix_to_test)
                 assert actual_output == expected_output, (

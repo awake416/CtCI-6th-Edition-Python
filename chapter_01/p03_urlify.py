@@ -49,6 +49,7 @@ def urlify_algo(s: str, length: int) -> str:
     # So, new_index starts at the end of the provided buffer s.
     new_index: int = len(char_list)
 
+
     for i in reversed(range(length)):
         if char_list[i] == " ":
             # Replace spaces
@@ -58,6 +59,7 @@ def urlify_algo(s: str, length: int) -> str:
             # Move characters
             char_list[new_index - 1] = char_list[i]
             new_index -= 1
+
     # The URLified part of the string is at the end of char_list, from new_index onwards.
     return "".join(char_list[new_index:])
 
@@ -75,11 +77,18 @@ def urlify_pythonic(text: str, length: int) -> str:
         return "Error: length cannot be negative" # Placeholder for error handling
     # text[:length] handles length > len(text) gracefully (slices to end).
     # Process only the relevant part of the string (up to `length`) and replace spaces.
+
+    # convert back to string
+    return "".join(char_list[new_index:])
+
+
+
     return text[:length].replace(" ", "%20")
 
 
 class Test(unittest.TestCase):
     """Tests for URLify functions."""
+
 
     # Test cases: (input_string_with_buffer, true_length, expected_urlified_string)
     test_cases: list[tuple[str, int, str]] = [
@@ -123,6 +132,7 @@ class Test(unittest.TestCase):
             assert actual == expected, (
                 f"{func.__name__}('{s}', {length}) produced '{actual}', expected '{expected}'"
             )
+
 
 
 if __name__ == "__main__":

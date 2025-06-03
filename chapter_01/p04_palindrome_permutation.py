@@ -1,4 +1,5 @@
 # O(N)
+import string
 import unittest
 from collections import Counter
 from typing import Callable
@@ -64,7 +65,39 @@ def is_palindrome_permutation_pythonic(phrase: str) -> bool:
     # Count how many characters have an odd frequency
     odd_frequency_count = sum(count % 2 for count in char_counts.values())
 
+
     return odd_frequency_count <= 1
+
+def is_palindrome_bit_vector(phrase):
+    """checks if a string is a permutation of a palindrome"""
+    r = 0
+    for c in clean_phrase(phrase):
+        val = ord(c)
+        mask = 1 << val
+        if r & mask:
+            r &= ~mask
+        else:
+            r |= mask
+    return (r - 1) & r == 0
+
+
+def is_palindrome_bit_vector2(phrase):
+    """checks if a string is a permutation of a palindrome using XOR operation"""
+    count_odd = 0
+    for c in phrase:
+        val = char_number(c)
+        if val == -1:
+            continue
+        count_odd ^= 1 << val
+
+    return count_odd & count_odd - 1 == 0
+
+
+def is_palindrome_permutation_pythonic(phrase):
+    """function checks if a string is a permutation of a palindrome or not"""
+    counter = Counter(clean_phrase(phrase))
+    return sum(val % 2 for val in counter.values()) <= 1
+
 
 
 class Test(unittest.TestCase):
@@ -75,6 +108,7 @@ class Test(unittest.TestCase):
         ("abba", True),
         ("aabb", True),
         ("a-bba", True),
+        ("a-bba!", True),
         ("Tact Coa", True),
         ("jhsabckuj ahjsbckj", True),
         ("Able was I ere I saw Elba", True),
@@ -101,6 +135,14 @@ class Test(unittest.TestCase):
         is_palindrome_permutation,
         is_palindrome_permutation_pythonic,
     ]
+
+    testable_functions = [
+        is_palindrome_permutation,
+        is_palindrome_bit_vector,
+        is_palindrome_permutation_pythonic,
+        is_palindrome_bit_vector2,
+    ]
+
 
     def test_palindrome_permutation(self) -> None:
         """Runs all palindrome permutation check functions against defined test cases."""
